@@ -1,21 +1,54 @@
 package main
 
-import "fmt"
+import (
+	"bufio"
+	"fmt"
+	"os"
+	"strconv"
+	"strings"
+)
 
 type Contact struct {
 	ID int
 	Nom string
 	Email string
 }
-contacts := make(map[int]Contact)
+var contacts = make(map[int]Contact)
+
+
 func main() {
+	reader := bufio.NewReader(os.Stdin)
+	for {
+		printMenu()
+		input, _ := reader.ReadString('\n')
+		choice, err := strconv.Atoi(strings.TrimSpace(input))
+		if err != nil {
+			fmt.Println("Entrée invalide, veuillez entrer du choix correspondant.")
+
+	}
+		switch choice {
+		case 1:
+			ajouterContact(reader)
+		case 2:
+			fmt.Println("Lister Tous les contacts")
+		case 3:
+			fmt.Println("Supprimer un contact par ID")
+		case 4:
+			fmt.Println("Modifier un contact par ID")
+		case 5:
+			fmt.Println("A très bientôt ! 😸")
+			return
+		default:
+			fmt.Println("Choix invalide, veuillez réessayer.")
+		}
 	// This is a placeholder for the main function.
 // fmt.Println("Hello, World!")
-printMenu()
 }
+	}
 
 func printMenu(){
 	fmt.Println(" 🦋 === Menu Mini-CRM en CLI === 🦋")
+	fmt.Println("Choisissez une option (1-5): ")
 	fmt.Println("1. Ajouter un contact")
 	fmt.Println("2. Lister Tous les contacts")
 	fmt.Println("3. Supprimer un contact par ID")
@@ -25,11 +58,11 @@ func printMenu(){
 
 func ajouterContact(reader *bufio.Reader){
 	fmt.Print("Entrez le nom du contact: ")
-	nom := reader.ReadString('\n')
+	nom, _ := reader.ReadString('\n')
 	nom = strings.TrimSpace(nom)
 
 	fmt.Print("Entrez l'email du contact: ")
-	email := reader.ReadString('\n')
+	email, _ := reader.ReadString('\n')
 	email = strings.TrimSpace(email)
 
 	if nom == "" || email == "" {
