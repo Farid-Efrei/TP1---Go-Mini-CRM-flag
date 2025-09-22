@@ -18,7 +18,7 @@ var contacts = make(map[int]Contact)
 
 
 func main() {
-
+	//flag
 	ajouter := flag.Bool("ajouter", false, "Ajouter un contact")
 	nomFlag := flag.String("nom", "", "Nom du contact")
 	emailFlag := flag.String("email", "", "Email du contact")
@@ -47,6 +47,8 @@ func main() {
 
 	}
 		switch choice {
+		case 0:
+			afficherAide()
 		case 1:
 			ajouterContact(reader)
 		case 2:
@@ -68,12 +70,13 @@ func main() {
 
 func printMenu(){
 	fmt.Println(" 🦋 === Menu Mini-CRM en CLI === 🦋")
+	fmt.Println("0. Aide")
 	fmt.Println("1. Ajouter un contact")
 	fmt.Println("2. Lister Tous les contacts")
 	fmt.Println("3. Supprimer un contact par ID")
 	fmt.Println("4. Modifier un contact par ID")
 	fmt.Println("5. Quitter le Mini-CRM")
-	fmt.Println("Choisissez une option (1-5): ")
+	fmt.Println("Choisissez une option (0-5): ")
 }
 
 
@@ -160,4 +163,26 @@ func modifierContact(reader *bufio.Reader){
 	contacts[id] = contact
 	fmt.Println("Contact modifié avec succès.")
 }
+
+func afficherAide(){
+	fmt.Println()
+    fmt.Println("=== Aide - Mini-CRM CLI ===")
+    fmt.Println("0  : Affiche cette aide.")
+    fmt.Println("1  : Ajouter un contact (interactive). On vous demandera le nom et l'email.")
+    fmt.Println("2  : Lister tous les contacts en mémoire.")
+    fmt.Println("3  : Supprimer un contact en fournissant son ID (ex: 3).")
+    fmt.Println("4  : Modifier un contact en fournissant son ID puis les champs (laisser vide pour conserver).")
+    fmt.Println("5  : Quitter l'application.")
+    fmt.Println()
+    fmt.Println("Flags :")
+    fmt.Println("  --ajouter --nom=\"Tanjiro\" --email=\"tanjiro@kimetsu.jp\"")
+    fmt.Println("    Permet d'ajouter directement un contact sans entrer dans le menu (ne pas ajouter les guillemets).")
+    fmt.Println()
+    fmt.Println("Notes :")
+    fmt.Println(" - Les contacts sont stockés en mémoire seulement (perdus à la fermeture).")
+    fmt.Println(" - Les IDs sont générés automatiquement avec len(contacts)+1; après suppression un ID peut être manquant.")
+    fmt.Println()
+}
+
+
 
