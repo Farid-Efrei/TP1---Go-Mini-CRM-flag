@@ -30,7 +30,7 @@ func main() {
 		case 1:
 			ajouterContact(reader)
 		case 2:
-			fmt.Println("Lister Tous les contacts")
+			listerContacts()
 		case 3:
 			fmt.Println("Supprimer un contact par ID")
 		case 4:
@@ -75,3 +75,14 @@ func ajouterContact(reader *bufio.Reader){
 	contacts[id] = contact
 	fmt.Printf("Contact ajouté avec ID %d\n", id)
 } 
+
+func listerContacts(){
+	if len(contacts) == 0 {
+		fmt.Println("Aucun contact disponible.")
+		return
+	}
+	fmt.Println("Liste des contacts:")
+	for _, contact := range contacts {
+		fmt.Printf("ID: %d, Nom: %s, Email: %s\n", contact.ID, contact.Nom, contact.Email)
+	}
+}
