@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"os"
 	"strconv"
@@ -17,6 +18,25 @@ var contacts = make(map[int]Contact)
 
 
 func main() {
+
+	ajouter := flag.Bool("ajouter", false, "Ajouter un contact")
+	nomFlag := flag.String("nom", "", "Nom du contact")
+	emailFlag := flag.String("email", "", "Email du contact")
+	flag.Parse()
+
+	if *ajouter {
+		if *nomFlag == "" || *emailFlag == "" {
+			fmt.Println("Le nom et l'email sont requis pour ajouter un contact.")
+			return
+		}
+		id := len(contacts) + 1
+		contact := Contact{ID: id, Nom: *nomFlag, Email: *emailFlag}
+		contacts[id] = contact
+		fmt.Printf("Contact ajouté avec ID %d, Nom: %s, Email: %s\n", id, contact.Nom, contact.Email)
+
+		return
+	}
+
 	reader := bufio.NewReader(os.Stdin)
 	for {
 		printMenu()
@@ -34,7 +54,7 @@ func main() {
 		case 3:
 			supprimerContact(reader)
 		case 4:
-			fmt.Println("Modifier un contact par ID")
+			modifierContact(reader)
 		case 5:
 			fmt.Println("A très bientôt ! 😸")
 			return
@@ -56,6 +76,8 @@ func printMenu(){
 	fmt.Println("Choisissez une option (1-5): ")
 }
 
+
+
 func ajouterContact(reader *bufio.Reader){
 	fmt.Print("Entrez le nom du contact: ")
 	nom, _ := reader.ReadString('\n')
@@ -76,9 +98,10 @@ func ajouterContact(reader *bufio.Reader){
 	fmt.Printf("Contact ajouté avec ID %d\n", id)
 } 
 
+
 func listerContacts(){
 	if len(contacts) == 0 {
-		fmt.Println("Aucun contact disponible.")
+		fmt.Println("Aucun contact disponible !!!")
 		return
 	}
 	fmt.Println("Liste des contacts:")
@@ -106,4 +129,35 @@ func supprimerContact(reader *bufio.Reader){
 	fmt.Println("Contact supprimé.")
 }
 
+func modifierContact(reader *bufio.Reader){
+	fmt.Println("ID à modifier : ")
+	input, _ := reader.ReadString('\n')
+	id, err := strconv.Atoi(strings.TrimSpace(input))
+
+	if err != nil {
+		fmt.Println("Entrée invalide, veuillez entrer un ID valide.")
+		return
+	}
+	contact, ok := contacts[id]
+	if !ok {
+		fmt.Println("Aucun contact trouvé avec cet ID.")
+		return
+	}
+
+	fmt.Printf("Nom actuel (%s), appuyez sur Entrée pour conserver: ", contact.Nom)
+	nom, _ := reader.ReadString('\n')
+	nom = strings.TrimSpace(nom)
+	if nom != "" {
+		contact.Nom = nom
+	}
+
+	fmt.Printf("Email actuel (%s), appuyez sur Entrée pour conserver: ", contact.Email)
+	email, _ := reader.ReadString('\n')
+	email = strings.TrimSpace(email)
+	if email != "" {
+		contact.Email = email
+	}
+	contacts[id] = contact
+	fmt.Println("Contact modifié avec succès.")
+}
 
