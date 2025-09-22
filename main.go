@@ -32,7 +32,7 @@ func main() {
 		case 2:
 			listerContacts()
 		case 3:
-			fmt.Println("Supprimer un contact par ID")
+			supprimerContact(reader)
 		case 4:
 			fmt.Println("Modifier un contact par ID")
 		case 5:
@@ -48,12 +48,12 @@ func main() {
 
 func printMenu(){
 	fmt.Println(" 🦋 === Menu Mini-CRM en CLI === 🦋")
-	fmt.Println("Choisissez une option (1-5): ")
 	fmt.Println("1. Ajouter un contact")
 	fmt.Println("2. Lister Tous les contacts")
 	fmt.Println("3. Supprimer un contact par ID")
 	fmt.Println("4. Modifier un contact par ID")
 	fmt.Println("5. Quitter le Mini-CRM")
+	fmt.Println("Choisissez une option (1-5): ")
 }
 
 func ajouterContact(reader *bufio.Reader){
@@ -84,5 +84,26 @@ func listerContacts(){
 	fmt.Println("Liste des contacts:")
 	for _, contact := range contacts {
 		fmt.Printf("ID: %d, Nom: %s, Email: %s\n", contact.ID, contact.Nom, contact.Email)
+
 	}
+	fmt.Println("")
+
 }
+
+func supprimerContact(reader *bufio.Reader){
+	fmt.Println("ID à supprimer : ")
+	input, _ := reader.ReadString('\n')
+	id, err := strconv.Atoi(strings.TrimSpace(input))
+	if err != nil {
+		fmt.Println("Entrée invalide, veuillez entrer un ID valide.")
+		return
+	}
+	if _, ok := contacts[id]; !ok {
+		fmt.Println("Aucun contact trouvé avec cet ID.")
+		return
+	}
+	delete(contacts, id)
+	fmt.Println("Contact supprimé.")
+}
+
+
